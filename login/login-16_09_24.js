@@ -13,7 +13,7 @@ function login() {
         return
     }
 
-    fetch("http://192.168.1.78:5069/login", {
+    fetch("https://nearby-loon-privately.ngrok-free.app/login", {
         method: "POST",
         headers: {
             "username": usernameInput.value,

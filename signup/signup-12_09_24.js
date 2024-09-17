@@ -14,7 +14,7 @@ function signup() {
     const username = usernameInput.value
     const password = passwordInput.value
     if (verifyPassword(password) === true) {
-        fetch("http://192.168.1.78:5069/signup", {
+        fetch("https://nearby-loon-privately.ngrok-free.app/signup", {
             method: "POST",
             headers: {
                 "username": username,

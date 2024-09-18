@@ -29,7 +29,10 @@ function login() {
         }
     })
     .then(response => response.json())
-    .then(response => console.log(response.message); debounce = false)
+    .then(response => {
+        console.log(response.message)
+        debounce = false
+    })
     .catch(err => console.log(err))
 }
 

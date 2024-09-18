@@ -2,7 +2,15 @@ var usernameInput = document.getElementById("username")
 var passwordInput = document.getElementById("password")
 var loginButton = document.getElementById("login-button")
 
+var debounce = false
+
 function login() {
+    if (debounce === false) {
+        debounce = true
+    } else {
+        return
+    }
+    
     if (usernameInput.value == "") {
         alert("Username field is required")
         return
@@ -21,7 +29,7 @@ function login() {
         }
     })
     .then(response => response.json())
-    .then(response => console.log(response.message))
+    .then(response => console.log(response.message); debounce = false)
     .catch(err => console.log(err))
 }
 

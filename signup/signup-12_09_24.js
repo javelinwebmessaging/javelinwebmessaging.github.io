@@ -21,6 +21,11 @@ function signup() {
     
     const username = usernameInput.value
     const password = passwordInput.value
+
+    if (username.includes("<") || username.includes(">")) {
+        alert("Username contained unallowed characters")
+        return
+    }
     
     if (verifyPassword(password) === true) {
         fetch("https://nearby-loon-privately.ngrok-free.app/signup", {

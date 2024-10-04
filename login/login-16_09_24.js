@@ -28,12 +28,9 @@ async function login() {
         const response = await fetch("https://nearby-loon-privately.ngrok-free.app/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
                 username: usernameInput.value.trim(),
                 password: passwordInput.value
-            })
+            }
         });
 
         if (!response.ok) {

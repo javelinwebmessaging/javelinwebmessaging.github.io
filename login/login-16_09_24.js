@@ -1,39 +1,58 @@
-var usernameInput = document.getElementById("username")
-var passwordInput = document.getElementById("password")
-var loginButton = document.getElementById("login-button")
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("login-button");
 
-var debounce = false
+const debounce = (() => {
+    let isDebouncing = false;
+    return {
+        set: () => { isDebouncing = true; },
+        reset: () => { isDebouncing = false; },
+        isActive: () => isDebouncing
+    };
+})();
 
-function login() {
-    if (debounce === false) {
-        debounce = true
-    } else {
-        return
+async function login() {
+    if (debounce.isActive()) {
+        return;
     }
-    
-    if (usernameInput.value == "") {
-        alert("Username field is required")
-        return
-    }
+    debounce.set();
 
-    if (passwordInput.value == "") {
-        alert("Password field is required")
-        return
-    }
-
-    fetch("https://nearby-loon-privately.ngrok-free.app/login", {
-        method: "POST",
-        headers: {
-            "username": usernameInput.value,
-            "password": passwordInput.value
+    try {
+        if (!usernameInput.value.trim()) {
+            throw new Error("Username field is required");
         }
-    })
-    .then(response => response.json())
-    .then(response => {
-        console.log(response.message)
-        debounce = false
-    })
-    .catch(err => console.log(err))
+        if (!passwordInput.value) {
+            throw new Error("Password field is required");
+        }
+
+        const response = await fetch("https://nearby-loon-privately.ngrok-free.app/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: usernameInput.value.trim(),
+                password: passwordInput.value
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data.message);
+    } catch (error) {
+        console.error("Login error:", error.message);
+        alert(error.message);
+    } finally {
+        debounce.reset();
+    }
 }
 
-loginButton.addEventListener('click', login)
+loginButton.addEventListener('click', login);
+
+document.querySelector('form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    login();
+});
